@@ -78,6 +78,15 @@ function install_npm_if_not_present() {
 	fi
 }
 
+function install_nvim_config_if_not_present() {
+	nvim_dir="$HOME/.config/nvim"
+	if [ ! -d "$nvim_dir" ]
+	then
+		run_command "mkdir -p $nvim_dir"
+		run_command "git clone git@github.com:jinankjain/nvim-lua.git $nvim_dir"
+	fi
+}
+
 init
 
 # Things to be installed via package manager
@@ -86,11 +95,12 @@ install_deb_if_not_present "g++" "g++"
 install_deb_if_not_present "git" "git"
 install_deb_if_not_present "python3-pip" "pip3"
 install_deb_if_not_present "tmux" "tmux"
+install_deb_if_not_present "codespell" "codespell"
 
 # Things to be install via cargo
 install_cargo_if_not_present "ripgrep" "rg"
 install_cargo_if_not_present "fd-find" "fdfind"
-install_cargo_if_not_present "zoxide" "z"
+install_cargo_if_not_present "zoxide" "zoxide"
 install_cargo_if_not_present "zellij" "zellij"
 
 install_fzf_if_not_present
@@ -98,7 +108,12 @@ install_fzf_if_not_present
 install_neovim_if_not_present
 
 install_pip_if_not_present "neovim"
+install_pip_if_not_present "black"
+install_pip_if_not_present "isort"
 
 install_nodejs_if_not_present
 
 install_npm_if_not_present "neovim"
+install_npm_if_not_present "prettier"
+
+install_nvim_config_if_not_present
