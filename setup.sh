@@ -32,10 +32,23 @@ function install_cargo_if_not_present() {
 function install_fzf_if_not_present() {
 	if ! command -v "fzf" &> /dev/null
 	then
-		echo "=================== Installing $1 ======================="
-		run_command "git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf"
-		run_command "~/.fzf/install"
+		echo "=================== Installing fzf ======================="
+		run_command "git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf"
+		run_command "$HOME/.fzf/install"
 	fi
+}
+
+function install_neovim_if_not_present() {
+	nvim_version="v0.6.1"
+	nvim_release_url="https://github.com/neovim/neovim/releases/download/$nvim_version/nvim.appimage"
+	if ! command -v "nvim" &> /dev/null
+	then
+		echo "=================== Installing neovim ======================="
+		wget "$nvim_release_url"
+		chmod +x "nvim.appimage"
+		run_command "sudo mv nvim.appimage /usr/bin/nvim"
+	fi
+
 }
 
 init
@@ -54,3 +67,5 @@ install_cargo_if_not_present "zoxide" "z"
 install_cargo_if_not_present "zellij" "zellij"
 
 install_fzf_if_not_present
+
+install_neovim_if_not_present
