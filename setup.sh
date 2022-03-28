@@ -47,8 +47,17 @@ function install_neovim_if_not_present() {
 		wget "$nvim_release_url"
 		chmod +x "nvim.appimage"
 		run_command "sudo mv nvim.appimage /usr/bin/nvim"
+		run_command "sudo cp /usr/bin/nvim /usr/bin/vim"
 	fi
 
+}
+
+function install_pip_if_not_present() {
+	if ! pip3 list | rg "$1" &> /dev/null
+	then
+		echo "=================== Installing $1 ======================="
+		run_command "pip3 install $1"
+	fi
 }
 
 init
@@ -69,3 +78,5 @@ install_cargo_if_not_present "zellij" "zellij"
 install_fzf_if_not_present
 
 install_neovim_if_not_present
+
+install_pip_if_not_present "neovim" "neovim"
