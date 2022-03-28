@@ -60,6 +60,24 @@ function install_pip_if_not_present() {
 	fi
 }
 
+function install_nodejs_if_not_present() {
+	nodejs_version="16.x"
+	if ! command -v "node" &> /dev/null
+	then
+		echo "=================== Installing nodejs ======================="
+		curl -sL "https://deb.nodesource.com/setup_$nodejs_version" | sudo -E bash -
+		run_command "sudo apt-get install -y nodejs"
+	fi
+}
+
+function install_npm_if_not_present() {
+	if ! npm list -g | rg "$1" &> /dev/null
+	then
+		echo "=================== Installing $1 ======================="
+		run_command "sudo npm install -g $1"
+	fi
+}
+
 init
 
 # Things to be installed via package manager
@@ -79,4 +97,8 @@ install_fzf_if_not_present
 
 install_neovim_if_not_present
 
-install_pip_if_not_present "neovim" "neovim"
+install_pip_if_not_present "neovim"
+
+install_nodejs_if_not_present
+
+install_npm_if_not_present "neovim"
