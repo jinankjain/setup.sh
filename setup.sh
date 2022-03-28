@@ -10,7 +10,7 @@ function run_command () {
 
 function init () {
 	run_command "sudo apt-get update"
-	run_command "sudo apt-get upgrade"
+	run_command "sudo apt-get upgrade -y"
 }
 
 function install_deb_if_not_present() {
@@ -87,6 +87,28 @@ function install_nvim_config_if_not_present() {
 	fi
 }
 
+function install_golang_if_not_present() {
+        go_version="1.18"
+        go_bin_url="https://go.dev/dl/go$go_version.linux-amd64.tar.gz"
+
+        if ! command -v "go" &> /dev/null
+	then
+		echo "=================== Installing golang ======================="
+		curl -OL "$go_bin_url"
+                run_command "sudo tar -C /usr/local -xvf go$go_version.linux-amd64.tar.gz"
+                echo "export PATH=$PATH:/usr/local/go/bin" >> "$HOME/.bashrc"
+                rm "go$go_version.linux-amd64.tar.gz"
+	fi
+}
+
+function install_gopkg_if_not_present() {
+	if ! command -v "$2" &> /dev/null
+	then
+		echo "=================== Installing $2 ======================="
+		run_command "go install $1"
+	fi
+}
+
 init
 
 # Things to be installed via package manager
@@ -117,3 +139,6 @@ install_npm_if_not_present "neovim"
 install_npm_if_not_present "prettier"
 
 install_nvim_config_if_not_present
+
+install_golang_if_not_present
+install_gopkg_if_not_present "mvdan.cc/sh/v3/cmd/shfmt@latest" "shfmt"
