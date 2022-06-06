@@ -88,6 +88,7 @@ function install_golang_if_not_present() {
 		curl -OL "$go_bin_url"
 		run_command "sudo tar -C /usr/local -xvf go$go_version.linux-amd64.tar.gz"
 		echo "export PATH=\"$PATH\":/usr/local/go/bin" >>"$HOME/.bashrc"
+		echo "export PATH=\"$PATH\":\"$HOME\"/go/bin" >>"$HOME/.bashrc"
 		rm "go$go_version.linux-amd64.tar.gz"
 	fi
 }
